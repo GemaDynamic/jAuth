@@ -1,0 +1,32 @@
+{
+    "name": "junyan/auth",
+    "type": "library",
+    "description": "auth plug-in for laravel",
+    "keywords": [
+        "auth"
+    ],
+    "license": "MIT",
+    "require": {
+        "laravel/framework": "~6.0|~7.0|~8.0",
+        "tymon/jwt-auth": "^1.0"
+    },
+    "authors": [
+        {
+            "name": "陈依伟",
+            "email": "1764887758@qq.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Junyan\\Auth\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Junyan\\Auth\\AuthServiceProvider"
+            ]
+        }
+    }
+}
