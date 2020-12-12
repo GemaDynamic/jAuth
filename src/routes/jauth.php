@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Junyan\Auth\Controller\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -11,6 +12,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post("login", function () {
-    dd("23333");
-});
+//获取验证码
+
+Route::get("sendCode",[LoginController::class,"sendCode"]);
+
+//登录
+Route::post("login",[LoginController::class,"login"]);

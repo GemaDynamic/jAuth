@@ -1,6 +1,6 @@
 <?php
 
-namespace Junyan\Auth\Controller;
+namespace Junyan\Auth\Controllers;
 
 use Junyan\Auth\Requests\LoginRequest;
 use Junyan\Auth\Traits\AuthTrait;
@@ -9,21 +9,18 @@ use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
-    // public $service;
-    // public function __construct(AuthService $authService)
-    // {
-    //     $this->service = $authService;
-    // }
     use AuthTrait;
     /**
      * 登录
      */
+    public $redirectTo = "/";
     public function login(LoginRequest $request)
     {
+        dd("233");
         $data = $request->validated();
-        switch ($data["type"]) {
-            case "code":
-        }
+        $method = "loginBy" . ucfirst($request->type);
+        $res = $this->$method($data, $request->remember);
+        return $res;
     }
 
     /**
@@ -32,5 +29,12 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         # code...
+    }
+    public function sendCode(Request $request)
+    {
+        $res = $this->setCode($request->account);
+        if ($res) {
+            return success();
+        }
     }
 }

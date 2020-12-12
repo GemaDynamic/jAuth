@@ -7,15 +7,15 @@ use Illuminate\Validation\Rule;
 
 class LoginRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return false;
-    }
+    // /**
+    //  * Determine if the user is authorized to make this request.
+    //  *
+    //  * @return bool
+    //  */
+    // public function authorize()
+    // {
+    //     return false;
+    // }
 
     /**
      * Get the validation rules that apply to the request.
@@ -24,9 +24,12 @@ class LoginRequest extends FormRequest
      */
     public function rules()
     {
+        $type = request("type", null);
         return [
             "type"    => ["required", Rule::in(["code", "password"])],
-            "accoutn" => ["required", Rule::exists("users", "account")->where("status", true)]
+            "account" => ["required", Rule::exists("users", "account")->where("status", true)],
+            "password" => [$type == "password" ? "required" : "nullable", "max:32"],
+            "code" => [$type == "code" ? "required" : "nullable", "max:6"],
         ];
     }
 }

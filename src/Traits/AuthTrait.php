@@ -11,6 +11,7 @@ use Junyan\Auth\Exceptions\WrongPasswordException;
 
 trait AuthTrait
 {
+    public $redirectTo = "/";
     /**
      * 向账号添加验证码
      *
@@ -25,8 +26,7 @@ trait AuthTrait
         $code || $code = random_int(100000, 999999);
 
         $res = $this->sendCodeSms($account, compact("code"))
-            && Cache::tags(["login_code"])->set($account, $code, 5 * 60);
-
+            && Cache::tags("login_code")->set($account, $code, 5 * 60);
         return $res;
     }
 
@@ -40,7 +40,6 @@ trait AuthTrait
      */
     protected function sendCodeSms($phone, $params)
     {
-
         return true;
     }
 
@@ -53,9 +52,11 @@ trait AuthTrait
      * @throw LoginCodeErrorException
      * @throw LoginCodeExpiredException
      */
-    public function loginByCode($account, $code)
+    public function loginByCode($data)
     {
-        $cache_code = Cache::tags(["login_code"])->get($account);
+        $account = $data["account"];
+        $code = $data["code"];
+        $cache_code = Cache::tags("login_code")->get($account);
         // 有
         if ($cache_code) {
             // 且正确
@@ -82,9 +83,9 @@ trait AuthTrait
      * @throw WrongPasswordException
      *
      */
-    public function loginByPassword($account, $password, $remember = false)
+    public function loginByPassword($data, $remember = false)
     {
-        if (auth()->attempt([$account, $password], $remember)) {
+        if (auth()->attempt($data, $remember)) {
             return $this->loginSuccess();
         } else {
             throw new WrongPasswordException();
@@ -98,6 +99,16 @@ trait AuthTrait
      */
     public function loginSuccess()
     {
-        return back();
+        return request()->wantsJson()
+            ? success()
+            : response()->redirectTo($this->getRedirectTo());
+    }
+
+    /**
+     * 获取登录成功后的重定向的地址
+     */
+    protected function getRedirectTo()
+    {
+        return request()->redirectTo ?? $this->redirectTo;
     }
 }
