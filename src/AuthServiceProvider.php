@@ -29,8 +29,8 @@ class AuthServiceProvider extends ServiceProvider
         }
 
         //注册resources
-        $this->loadViewsFrom($this->viewPath(), 'courier');
-        $this->loadTranslationsFrom(__DIR__ . '/path/to/translations', 'courier');
+        $this->loadViewsFrom($this->viewPath(), 'jauth');
+        $this->loadTranslationsFrom(__DIR__ . '/path/to/translations', 'jauth');
     }
 
     /**

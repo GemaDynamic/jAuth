@@ -2,7 +2,9 @@
 
 namespace Junyan\Auth\Traits;
 
-use Junyan\Auth\Models\User;
+use App\Models\User;
+use App\Providers\RouteServiceProvider;
+// use Junyan\Auth\Models\User;
 use Illuminate\Http\Response;
 use Junyan\Auth\Exceptions\LoginCodeExpiredException;
 use Junyan\Auth\Exceptions\LoginCodeErrorException;
@@ -11,7 +13,6 @@ use Junyan\Auth\Exceptions\WrongPasswordException;
 
 trait AuthTrait
 {
-    public $redirectTo = "/";
     /**
      * 向账号添加验证码
      *
@@ -107,8 +108,9 @@ trait AuthTrait
     /**
      * 获取登录成功后的重定向的地址
      */
-    protected function getRedirectTo()
+    protected function getRedirectTo($request = null)
     {
-        return request()->redirectTo ?? $this->redirectTo;
+        $request || $request = request();
+        return $request->redirectTo ??  RouteServiceProvider::HOME;
     }
 }

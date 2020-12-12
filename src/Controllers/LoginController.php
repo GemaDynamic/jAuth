@@ -5,20 +5,20 @@ namespace Junyan\Auth\Controllers;
 use Junyan\Auth\Requests\LoginRequest;
 use Junyan\Auth\Traits\AuthTrait;
 use App\Http\Controllers\Controller;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
     use AuthTrait;
 
-    public $redirectTo = "/";
-
     /**
      * 获取登录页面
      */
     public function loginPage(Request $request)
     {
-        $action = route("jauth.login", ["redirectTo" => $request->redirectTo ?? $this->redirectTo]);
+        $data = ["redirectTo" => $this->getRedirectTo($request)];
+        $action = route("login", $data);
         return view("jauth::login", compact("action"));
     }
 
@@ -27,9 +27,12 @@ class LoginController extends Controller
      */
     public function login(LoginRequest $request)
     {
-        $data = $request->validated();
+        $request->validated();
+        $data = $request->only(["account", $request->type]);
         $method = "loginBy" . ucfirst($request->type);
         $res = $this->$method($data, $request->remember);
+        // dd("???");
+        // dd($res);
         return $res;
     }
 

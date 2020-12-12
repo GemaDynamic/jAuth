@@ -419,6 +419,15 @@
         @endif
 
         <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
+            @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
             @yield('content')
         </div>
     </div>
