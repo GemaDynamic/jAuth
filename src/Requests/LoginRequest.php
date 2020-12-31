@@ -27,7 +27,7 @@ class LoginRequest extends FormRequest
         $type = request("type", null);
         return [
             "type"    => ["required", Rule::in(["code", "password"])],
-            "account" => ["required", Rule::exists("users", "account")->where("status", true)],
+            "account" => ["required", Rule::exists("users", "phone")->where("status", true)],
             "password" => [$type == "password" ? "required" : "nullable", "max:32"],
             "code" => [$type == "code" ? "required" : "nullable", "max:6"],
         ];
